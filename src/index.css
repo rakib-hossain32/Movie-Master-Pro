@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "tailwindcss";
+@plugin "daisyui";
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+@layer components {
+  .cinema-shadow-lg {
+    box-shadow: 0 15px 35px rgba(212, 55, 55, 0.4);
+  }
+}
+
+@layer base {
+  :root {
+    /* Background Colors */
+    --color-background: #0f0f0f; /* gray-950 */
+    --color-foreground: #ffffff; /* white */
+    --color-card: #262626; /* gray-800 */
+    --color-card-foreground: #ffffff; /* white */
+    --color-popover: #2d2d2d; /* gray-700 */
+    --color-popover-foreground: #ffffff; /* white */
+    --color-muted: #1a1a1a; /* gray-900 */
+    --color-muted-foreground: #b3b3b3; /* gray-400 */
+
+    /* Primary Colors */
+    --color-primary: #e50914; /* red-600 */
+    --color-primary-foreground: #ffffff; /* white */
+    --color-secondary: #2d2d2d; /* gray-700 */
+    --color-secondary-foreground: #ffffff; /* white */
+
+    /* Accent Colors */
+    --color-accent: #d4af37; /* yellow-500 */
+    --color-accent-foreground: #1a1a1a; /* gray-900 */
+
+    /* State Colors */
+    --color-success: #46d369; /* green-500 */
+    --color-success-foreground: #ffffff; /* white */
+    --color-warning: #ff9500; /* orange-500 */
+    --color-warning-foreground: #ffffff; /* white */
+    --color-error: #ff453a; /* red-500 */
+    --color-error-foreground: #ffffff; /* white */
+    --color-destructive: #ff453a; /* red-500 */
+    --color-destructive-foreground: #ffffff; /* white */
+
+    /* UI Elements */
+    --color-border: rgba(255, 255, 255, 0.1); /* white/10 */
+    --color-input: #262626; /* gray-800 */
+    --color-ring: #e50914; /* red-600 */
+
+    /* Text Colors */
+    --color-text-primary: #ffffff; /* white */
+    --color-text-secondary: #b3b3b3; /* gray-400 */
+
+    /* Cinema Theme Specific */
+    --color-cinema-dark: #1a1a1a; /* gray-900 */
+    --color-cinema-surface: #262626; /* gray-800 */
+    --color-cinema-accent: #d4af37; /* yellow-500 */
+    --color-cinema-red: #e50914; /* red-600 */
+
+    /* Border Radius */
+    --radius: 8px;
+  }
+}
