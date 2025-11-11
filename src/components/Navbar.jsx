@@ -1,194 +1,152 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import React, { useState, useEffect, useRef } from "react";
+import { Star, Clock, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
 
-import {
-  CircleChevronDown,
-  CircleChevronLeft,
-  CircleChevronRight,
-  Play,
-  Plus,
-  Star,
-} from "lucide-react";
+export default function Navbar() {
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
-const Navbar = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const featuredMovies = [
-    {
-      id: 1,
-      title: "Dune: Part Two",
-      year: 2024,
-      genre: "Sci-Fi, Adventure",
-      rating: 8.9,
-      description:
-        "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the known universe, he endeavors to prevent a terrible future only he can foresee.",
-      img: "https://images.unsplash.com/photo-1602859790151-845f2023bee8",
-      alt: "Futuristic desert landscape with golden sand dunes under dramatic orange sky",
-      backdrop: "https://images.unsplash.com/photo-1583446687487-724401506575",
-      backdropAlt:
-        "Epic space battle scene with starships against nebula gray-950",
-    },
-    {
-      id: 2,
-      title: "Oppenheimer",
-      year: 2023,
-      genre: "Biography, Drama",
-      rating: 8.7,
-      description:
-        "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II. A gripping tale of scientific achievement and moral complexity.",
-      img: "https://media.printler.com/media/photo/178903.jpg?rmode=crop&width=725&height=1024",
-      alt: "Serious man in suit and hat looking contemplatively at camera in black and white style",
-      backdrop:
-        "https://www.lueztheater.com/wp-content/uploads/2023/08/Oppenheimer.jpg",
-      backdropAlt:
-        "Dramatic nuclear explosion mushroom cloud rising into dark sky",
-    },
-    {
-      id: 3,
-      title: "Spider-Man: Across the Spider-Verse",
-      year: 2023,
-      genre: "Animation, Action",
-      rating: 9.1,
-      description:
-        "Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence. When the heroes clash on how to handle a new threat, Miles must redefine what it means to be a hero.",
-      img: "https://images.unsplash.com/photo-1685638698261-1cd3f3567021",
-      alt: "Colorful animated superhero in red and black suit swinging through vibrant city",
-      backdrop: "https://images.unsplash.com/photo-1472977876147-21699a56a5a3",
-      backdropAlt:
-        "Multicolored abstract cityscape with neon lights and geometric patterns",
-    },
-  ];
+  const { movies } = useAuth();
 
+  // const [movies, setMovies] = useState([]);
+
+  // useEffect(() => {
+  //   axiosSecure.get("/movies").then((data) => {
+  //     setMovies(data.data);
+  //   });
+  // }, [axiosSecure]);
+  // console.log(Boolean(movies))
+
+  const intervalRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const navigate = useNavigate();
+
+  const visibleSlides = Math.min(5, movies.length);
+
+  const startAutoSlide = () => {
+    stopAutoSlide();
+    intervalRef.current = setInterval(() => {
+      setCarouselIndex((prev) => (prev + 1) % visibleSlides);
+    }, 3000);
+  };
+
+  const stopAutoSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  // Auto-slide
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % featuredMovies?.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [featuredMovies?.length]);
+    startAutoSlide();
+    return () => stopAutoSlide();
+  }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % featuredMovies?.length);
+  // Touch events for mobile swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
   };
 
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + featuredMovies?.length) % featuredMovies?.length
-    );
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
   };
 
-  const currentMovie = featuredMovies?.[currentSlide];
-
-  
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50;
+    if (diff > threshold)
+      setCarouselIndex((prev) => (prev + 1) % visibleSlides);
+    else if (diff < -threshold)
+      setCarouselIndex((prev) => (prev - 1 + visibleSlides) % visibleSlides);
+  };
 
   return (
-    <section className="relative h-screen overflow-hidden bg-gray-950 ">
-      <div className="absolute inset-0 ">
-        <img
-          src={currentMovie?.backdrop}
-          alt={currentMovie?.backdropAlt}
-          className="object-cover w-full h-full"
-        />
-
-        <div className="absolute inset-0 bg-linear-to-r from-gray-950/90 via-gray-950/60 to-transparent"></div>
-        <div className="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent"></div>
-      </div>
-
-      <div className="relative z-10 flex items-center h-full">
-        <div className="container px-4 mx-auto lg:px-6">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            {/* Text Content */}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex items-center space-x-4 text-sm text-gray-400">
-                  <span className="px-3 py-1 font-medium text-red-600 rounded-full bg-red-600/20">
-                    Featured
-                  </span>
-                  <span>{currentMovie?.year}</span>
-                  <span>•</span>
-                  <span>{currentMovie?.genre}</span>
-                </div>
-                <h1 className="text-4xl font-bold text-white lg:text-6xl text-shadow-2xs">
-                  {currentMovie?.title}
-                </h1>
-                <div className="flex items-center mt-5 space-x-2">
-                  <div className="flex items-center space-x-1">
-                    {/* <Icon name="Star" size={20} className="" /> */}
-                    <Star className="text-yellow-500 fill-current" />
-                    <span className="text-lg font-semibold text-yellow-500">
-                      {currentMovie?.rating}
-                    </span>
-                  </div>
-                  <span className="text-gray-400">/10</span>
-                </div>
+    <div
+      className="relative h-[400px] sm:h-[450px] md:h-[550px] overflow-hidden"
+      onMouseEnter={stopAutoSlide}
+      onMouseLeave={startAutoSlide}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {movies.slice(0, visibleSlides).map((movie, idx) => (
+        <div
+          key={movie._id}
+          className={`absolute inset-0 transition-opacity duration-1000 
+            ${
+              idx === carouselIndex
+                ? "opacity-100 pointer-events-auto z-20"
+                : "opacity-0 pointer-events-none z-10"
+            }`}
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.3) 80%), url(${movie.poster})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="flex items-center h-full px-4 mx-auto max-w-7xl">
+            <div className="max-w-2xl p-4 space-y-3 sm:p-6 md:p-8 sm:space-y-4 md:space-y-6 animate-fade-in">
+              <h1 className="text-2xl font-extrabold text-white sm:text-3xl md:text-5xl">
+                {movie.title}
+              </h1>
+              <div className="flex flex-wrap items-center space-x-3 text-xs text-white sm:space-x-4 sm:text-sm md:text-base">
+                <span className="flex items-center font-bold">
+                  <Star className="w-4 h-4 mr-1 text-yellow-400 sm:w-5 sm:h-5" />
+                  {movie.rating}
+                </span>
+                <span>{movie.year}</span>
+                <span>{movie.genre}</span>
+                <span className="flex items-center">
+                  <Clock className="w-3 h-3 mr-1 sm:w-4 sm:h-4" />
+                  {movie.runtime} min
+                </span>
               </div>
-
-              <p className="max-w-2xl text-lg leading-relaxed text-gray-400">
-                {currentMovie?.description}
+              <p className="text-xs text-gray-200 sm:text-sm md:text-base line-clamp-3">
+                {movie.description}
               </p>
-
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <button className="inline-flex items-center space-x-2 rounded-full bg-linear-to-r from-rose-500 to-rose-700 px-6 py-2.5 font-medium text-white transition-all duration-200 hover:shadow-lg cursor-pointer ">
-                  <Play />
-                  <Link to={`/movie-details?id=${currentMovie?.id}`}>
-                    Watch Trailer
-                  </Link>
-                </button>
-                <button className="flex items-center px-4 py-3 text-yellow-500 border border-yellow-500 rounded-full cursor-pointer hover:bg-yellow-500 hover:text-gray-950">
-                  <Plus />
-                  Add to Collection
-                </button>
-              </div>
-            </div>
-
-            <div className="justify-center hidden lg:flex">
-              <div className="relative group">
-                <div className="w-80 h-[480px] rounded-2xl overflow-hidden  cinema-shadow-lg">
-                  <img
-                    src={currentMovie?.img}
-                    alt={currentMovie?.alt}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-linear-to-t from-gray-950/20 to-transparent rounded-2xl"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute z-20 transform -translate-x-1/2 bottom-8 left-1/2">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={prevSlide}
-            className="w-12 h-12 text-white bg-gray-950/20 backdrop-blur-sm hover:bg-gray-950/40"
-          >
-            <CircleChevronLeft />
-          </button>
-
-          <div className="flex space-x-2">
-            {featuredMovies?.map((_, index) => (
               <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide
-                    ? "bg-yellow-500 w-8"
-                    : "bg-white/30 hover:bg-white/50"
-                }`}
-              />
-            ))}
+                onClick={() => navigate(`/movie-details/${movie._id}`)}
+                className="flex items-center px-4 py-2 space-x-2 text-xs font-medium text-white transition transform bg-blue-600 shadow-lg cursor-pointer sm:px-6 md:px-8 sm:py-3 md:py-3 rounded-xl hover:bg-blue-900 hover:scale-105 sm:text-sm md:text-base"
+              >
+                <Play className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span>View Details</span>
+              </button>
+            </div>
           </div>
-
-          <button
-            onClick={nextSlide}
-            className="w-12 h-12 text-white bg-gray-950/20 backdrop-blur-sm hover:bg-gray-950/40"
-          >
-            <CircleChevronRight />
-          </button>
         </div>
-      </div>
-    </section>
-  );
-};
+      ))}
 
-export default Navbar;
+      {/* Carousel Controls */}
+      <button
+        onClick={() =>
+          setCarouselIndex((carouselIndex - 1 + visibleSlides) % visibleSlides)
+        }
+        className="absolute z-30 p-2 text-white transition -translate-y-1/2 rounded-full cursor-pointer sm:p-3 left-2 sm:left-4 top-1/2 bg-black/50 hover:bg-black/70 focus:outline-none"
+      >
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+      <button
+        onClick={() => setCarouselIndex((carouselIndex + 1) % visibleSlides)}
+        className="absolute z-30 p-2 text-white transition -translate-y-1/2 rounded-full cursor-pointer sm:p-3 right-2 sm:right-4 top-1/2 bg-black/50 hover:bg-black/70 focus:outline-none"
+      >
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+
+      {/* Carousel Indicators */}
+      <div className="absolute z-30 flex space-x-2 -translate-x-1/2 bottom-3 sm:bottom-4 left-1/2">
+        {[...Array(visibleSlides)].map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCarouselIndex(idx)}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+              idx === carouselIndex
+                ? "bg-white w-6 sm:w-8"
+                : "bg-white/50 hover:bg-white/70"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

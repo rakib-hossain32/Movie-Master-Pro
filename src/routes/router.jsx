@@ -5,8 +5,10 @@ import AllMovies from "../pages/AllMovies";
 import MyCollection from "../pages/MyCollection";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
+import MovieDetails from "../components/MovieDetalis/MovieDetails";
+import AddMovie from "../pages/AddMovie";
+import EditMovie from "../components/EditMovie/EditMovie";
+import Watchlist from "../pages/Watchlist";
 
 export const router = createBrowserRouter([
   {
@@ -15,15 +17,31 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home ,
+        Component: Home,
       },
       {
         path: "/all-movies",
         element: <AllMovies />,
       },
       {
+        path: "/movie-details/:id",
+        Component: MovieDetails,
+      },
+      {
         path: "/my-collection",
         element: <MyCollection />,
+      },
+      {
+        path: "/edit-movie/:id",
+        element: <EditMovie isEdit={true} />,
+      },
+      {
+        path: "/add-movie",
+        element: <EditMovie isEdit={false} />,
+      },
+      {
+        path: '/watchlist',
+        element: <Watchlist/>
       },
       {
         path: "/login",
@@ -35,5 +53,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
- 
 ]);
