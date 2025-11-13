@@ -190,7 +190,9 @@ export default function Navigation() {
                               navigate("/");
                               setShowDropdown(false);
                             }}
-                            className="flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 dark:hover:bg-white/10"
+                            className={`flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10  ${
+                              isDarkMode ? "" : "text-gray-700  "
+                            }`}
                           >
                             <User className="w-4 h-4" />
                             Profile
@@ -201,7 +203,9 @@ export default function Navigation() {
                               navigate("/");
                               setShowDropdown(false);
                             }}
-                            className="flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 dark:hover:bg-white/10"
+                            className={`flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 ${
+                              isDarkMode ? "" : "text-gray-700  "
+                            }`}
                           >
                             <Settings className="w-4 h-4" />
                             Settings
@@ -336,7 +340,9 @@ export default function Navigation() {
                             navigate("/");
                             setShowDropdown(false);
                           }}
-                          className="flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 dark:hover:bg-white/10"
+                          className={`flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10  ${
+                            isDarkMode ? "" : "text-gray-700  "
+                          }`}
                         >
                           <User className="w-4 h-4" />
                           Profile
@@ -347,7 +353,9 @@ export default function Navigation() {
                             navigate("/");
                             setShowDropdown(false);
                           }}
-                          className="flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 dark:hover:bg-white/10"
+                          className={`flex items-center w-full gap-2 px-3 py-2 text-sm transition rounded-lg hover:bg-rose-500/10 ${
+                            isDarkMode ? "" : "text-gray-700  "
+                          }`}
                         >
                           <Settings className="w-4 h-4" />
                           Settings

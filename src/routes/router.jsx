@@ -26,12 +26,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () => fetch("http://localhost:3000/watchlist"),
+        loader: () =>
+          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
         Component: Home,
       },
       {
         path: "/all-movies",
-        loader: () => fetch("http://localhost:3000/watchlist"),
+        loader: () =>
+          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
         element: <AllMovies />,
       },
       {
@@ -56,7 +58,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "/add-movie",
-        loader: () => fetch("http://localhost:3000/watchlist"),
+        loader: () =>
+          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
         element: (
           <ProtectedRoute>
             {" "}
@@ -71,7 +74,8 @@ export const router = createBrowserRouter([
             <Watchlist />
           </ProtectedRoute>
         ),
-        loader: () => fetch("http://localhost:3000/watchlist"),
+        loader: () =>
+          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
       },
       {
         path: "/login",

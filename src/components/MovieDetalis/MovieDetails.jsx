@@ -206,11 +206,11 @@ const MovieDetails = () => {
               <DetailItem label="Added By" value={movie?.addedBy} />
             </div>
 
-            <div className="flex pt-4 space-x-4">
+            <div className="flex pt-4 space-x-4 ">
               <button
                 disabled={inWatchlist}
                 onClick={() => handleAddWatchlist()}
-                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition  ${
+                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition max-md:size-13 max-md:text-xs  ${
                   inWatchlist
                     ? " text-white bg-red-700 cursor-not-allowed "
                     : "bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer"
@@ -230,16 +230,18 @@ const MovieDetails = () => {
                 <>
                   <button
                     onClick={() => navigate(`/edit-movie/${movie._id}`)}
-                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700"
+                    className="flex items-center justify-center flex-1 px-6 py-3 space-x-2 text-white transition bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700 max-md:size-13 max-md:text-xs"
                   >
                     <Edit className="w-5 h-5" />
+
                     <span>Edit</span>
                   </button>
 
                   <button
                     onClick={handleMovieDelete}
-                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
+                    className="flex items-center justify-center flex-1 px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700 max-md:size-13 max-md:text-xs"
                   >
+                    {/* <Edit className="w-5 h-5" /> */}
                     <Trash2 className="w-5 h-5" />
                     <span>Delete</span>
                   </button>
