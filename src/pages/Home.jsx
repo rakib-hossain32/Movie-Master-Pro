@@ -5,6 +5,7 @@ import { Atom } from "react-loading-indicators";
 import TopRatedMovies from "./TopRatedMovies";
 import RecentlyAdded from "./RecentlyAdded";
 import GenreSection from "./GenreSection";
+import About from "./About";
 
 const Home = () => {
   // console.log(movies)
@@ -15,7 +16,8 @@ const Home = () => {
       <Statistics />
       <TopRatedMovies />
       <RecentlyAdded />
-      <GenreSection/>
+      <GenreSection />
+      <About/>
     </div>
   );
 };

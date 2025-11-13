@@ -19,7 +19,7 @@ const Login = () => {
     signInUser(email, password)
       .then(() => {
         // console.log(result);
-        navigate(location.state);
+        navigate(location.state || '/');
       })
       .catch((error) => {
         // console.log(error.message);
@@ -31,7 +31,7 @@ const Login = () => {
     // console.log("first");
     loginGoogle()
       .then((result) => {
-        navigate(location.state);
+        navigate(location.state || '/');
         console.log(result.user);
       })
       .catch((error) => {

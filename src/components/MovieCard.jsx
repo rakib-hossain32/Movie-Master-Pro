@@ -60,7 +60,7 @@ const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/watchlist/${id}`).then((data) => {
-          console.log(data.data);
+          // console.log(data.data);
           if (data.data.deletedCount) {
             setWatchId(id);
             // setId(id);
@@ -125,7 +125,7 @@ const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
             <button className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110">
               <Heart
                 className={`w-5 h-5 text-white
-                  // `}
+               `}
               />
             </button>
           )}
