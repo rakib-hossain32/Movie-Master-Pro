@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router";
 import {
   Film,
   Home,
-  Grid,
+  Clapperboard ,
   Heart,
   Sun,
   Moon,
@@ -94,7 +94,7 @@ export default function Navigation() {
           {/* Desktop Menu */}
           <div className="hidden space-x-4 lg:flex">
             <CustomNavLink icon={Home} label="Home" to="/" />
-            <CustomNavLink icon={Grid} label="All Movies" to="/all-movies" />
+            <CustomNavLink icon={Clapperboard } label="All Movies" to="/all-movies" />
             {currentUser && (
               <>
                 <CustomNavLink
@@ -288,7 +288,7 @@ export default function Navigation() {
                     src={currentUser.photoURL}
                     alt={currentUser.displayName}
                     referrerPolicy="no-referrer"
-                    className="object-cover w-8 h-8 border-2 rounded-full shadow-md border-rose-500"
+                    className="object-cover w-10 h-10 border-2 rounded-full shadow-md border-rose-500"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src =
@@ -404,7 +404,7 @@ export default function Navigation() {
           >
             <div className="px-4 py-3 space-y-2">
               <MobileNavLink icon={Home} label="Home" to="/" />
-              <MobileNavLink icon={Grid} label="All Movies" to="/all-movies" />
+              <MobileNavLink icon={Clapperboard } label="All Movies" to="/all-movies" />
               {currentUser && (
                 <>
                   <MobileNavLink
