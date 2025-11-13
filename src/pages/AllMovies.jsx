@@ -4,9 +4,12 @@ import MovieCard from "../components/MovieCard";
 import { Plus, Film } from "lucide-react";
 
 import { useNavigate } from "react-router";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const AllMovies = () => {
   const { isDarkMode, user: currentUser } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
 
   const [movies, setMovies] = useState([]);
   const [filterGenres, setFilterGenres] = useState([]);
@@ -14,7 +17,45 @@ const AllMovies = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate()
 
-  const GENRES = [
+  const handleGenreClick = (genre) => {
+    setFilterGenres((prev) =>
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
+    );
+  };
+
+  // 🔹 Rating change handler
+  const handleRatingChange = (e) => {
+    setRatingRange([0, parseFloat(e.target.value)]);
+  };
+
+  // 🔹 Fetch filtered movies
+  useEffect(() => {
+    const fetchFilteredMovies = async () => {
+      setIsLoading(true);
+      try {
+        const genres = filterGenres.join(",");
+        const [minRating, maxRating] = ratingRange;
+
+        // 🔹 যদি কিছুই সিলেক্ট না করা হয় — সব movie আনা হবে
+        const query =
+          genres || minRating > 0 || maxRating < 10
+            ? `/movies/filter?genres=${genres}&minRating=${minRating}&maxRating=${maxRating}`
+            : "/movies";
+
+        const { data } = await axiosSecure.get(query);
+        setMovies(data);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFilteredMovies();
+  }, [filterGenres, ratingRange, axiosSecure]);
+
+  // 🔹 Genre list
+  const genres = [
     "Action",
     "Drama",
     "Comedy",
@@ -25,30 +66,7 @@ const AllMovies = () => {
     "Animation",
     "Crime",
   ];
-
-  // console.log(movies)
-
-  // Fetch filtered movies
-  const fetchFilteredMovies = async () => {
-    setIsLoading(true);
-    try {
-      const genres = filterGenres.map((g) => g.toLowerCase()).join(",");
-      const res = await fetch(
-        `http://localhost:3000/movies/filter?genres=${genres}&minRating=${ratingRange[0]}&maxRating=${ratingRange[1]}`
-      );
-      const data = await res.json();
-      setMovies(data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch when filters change
-  useEffect(() => {
-    fetchFilteredMovies();
-  }, [filterGenres, ratingRange]);
+  
 
   return (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -89,22 +107,14 @@ const AllMovies = () => {
             Filter by Genre
           </label>
           <div className="flex flex-wrap gap-2">
-            {GENRES.map((genre) => (
+            {genres.map((genre) => (
               <button
                 key={genre}
-                onClick={() =>
-                  setFilterGenres((prev) =>
-                    prev.includes(genre)
-                      ? prev.filter((g) => g !== genre)
-                      : [...prev, genre]
-                  )
-                }
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  filterGenres.includes(genre)
-                    ? "bg-blue-600 text-white shadow-md"
-                    : isDarkMode
-                    ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                onClick={() => handleGenreClick(genre.toLowerCase())}
+                className={`px-3 py-1 rounded-full text-sm ${
+                  filterGenres.includes(genre.toLowerCase())
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-700 hover:bg-gray-600"
                 }`}
               >
                 {genre}
@@ -146,9 +156,7 @@ const AllMovies = () => {
             max="10"
             step="0.1"
             value={ratingRange[1]}
-            onChange={(e) =>
-              setRatingRange([ratingRange[0], parseFloat(e.target.value)])
-            }
+            onChange={handleRatingChange}
             className="w-full"
           />
         </div>
@@ -171,7 +179,12 @@ const AllMovies = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {movies.map((movie) => (
-            <MovieCard key={movie._id} movie={movie} isEdit={true} />
+            <MovieCard
+              key={movie._id}
+              movie={movie}
+              isEdit={true}
+              isAllMovies={true}
+            />
           ))}
         </div>
       )}

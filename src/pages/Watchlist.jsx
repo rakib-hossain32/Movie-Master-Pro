@@ -5,9 +5,12 @@ import MovieCard from "../components/MovieCard";
 import { Heart } from "lucide-react";
 
 const Watchlist = () => {
-  const a = useLoaderData();
-  const { isDarkMode, user, movies } = useAuth();
-  const [watchlists, setWatchlists] = useState([]);
+    const a = useLoaderData();
+    
+    const { isDarkMode, movies } = useAuth();
+    
+    const [watchlists, setWatchlists] = useState([]);
+    
     const [watchId, setWatchId] = useState("");
     
     const navigate = useNavigate()

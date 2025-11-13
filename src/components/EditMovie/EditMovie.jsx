@@ -7,7 +7,7 @@ import FormSelect from "./FormSelect";
 import { Plus, Edit } from "lucide-react";
 import Swal from "sweetalert2";
 
-const GENRES = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
+const GENRES = ["action", "comedy", "drama", "horror", "Sci-Fi"];
 
 const EditMovie = ({ isEdit }) => {
   const { isDarkMode, movies, user } = useAuth();
@@ -38,7 +38,7 @@ const EditMovie = ({ isEdit }) => {
       if (movie) {
         setFormData({
           title: movie.title || "",
-          genre: movie.genre || "",
+          genre: movie.genre.toLowerCase() || "",
           year: movie.year || "",
           director: movie.director || "",
           cast: movie.cast || "",
@@ -56,24 +56,37 @@ const EditMovie = ({ isEdit }) => {
   const handleAddMovie = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
-      await axiosSecure.post("/movies", { ...formData, addedBy: user.email }).then((data) => { 
-        if (data.data.insertedId) {
-          // console.log(data.data);
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your Movie Updated!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate("/all-movies");
-        }
-         
-       })
-      // console.log(formData);
-     
-    }  finally {
+      
+      const updatedData = {
+        ...formData,
+        genre: formData.genre.toLowerCase(),
+        rating: parseFloat(formData.rating),
+        addedBy: user.email,
+       
+      };
+
+      const { data } = await axiosSecure.post("/movies", updatedData);
+
+      if (data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Movie Added Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/all-movies");
+      }
+    } catch (error) {
+      console.error("Error adding movie:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong while adding the movie!",
+      });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -81,25 +94,43 @@ const EditMovie = ({ isEdit }) => {
   const handleUpdateMovie = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
-      await axiosSecure.patch(`/movies/update/${id}`, formData).then((data) => {
-        // console.log(data);
-        if (data.data.modifiedCount) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your Movie Updated!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate(`/movie-details/${id}`);
-        }
+      
+      const updatedData = {
+        ...formData,
+        genre: formData.genre.toLowerCase(),
+        rating: parseFloat(formData.rating),
+        updatedAt: new Date(),
+      };
+
+      const { data } = await axiosSecure.patch(
+        `/movies/update/${id}`,
+        updatedData
+      );
+
+      if (data.modifiedCount) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Movie Updated Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate(`/movie-details/${id}`);
+      }
+    } catch (error) {
+      console.error("Error updating movie:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong while updating the movie!",
       });
-      // console.log()
     } finally {
       setIsLoading(false);
     }
   };
+
 
   // console.log(formData);
 

@@ -1,7 +1,6 @@
-
 import useAuth from "../hooks/useAuth";
 import { Heart, Star, Trash2 } from "lucide-react";
-import { NavLink,  } from "react-router";
+import { NavLink } from "react-router";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
@@ -63,7 +62,7 @@ const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
         axiosSecure.delete(`/watchlist/${id}`).then((data) => {
           console.log(data.data);
           if (data.data.deletedCount) {
-            setWatchId(id)
+            setWatchId(id);
             // setId(id);
             // console.log(id)
             // const remaining =
