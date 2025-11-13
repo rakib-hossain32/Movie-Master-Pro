@@ -17,24 +17,29 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  
+  const [loading, setLoading] = useState(true);
+
   const axiosSecure = useAxiosSecure();
 
   const [movies, setMovies] = useState([]);
 
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signInUser = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   const loginGoogle = () => {
+    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
   const updateUser = (displayName, photoURL) => {
+    setLoading(true);
     return updateProfile(auth.currentUser, {
       displayName,
       photoURL,
@@ -42,6 +47,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const signOutUser = () => {
+    setLoading(true);
     return signOut(auth);
   };
 
@@ -59,6 +65,7 @@ const AuthProvider = ({ children }) => {
           // console.log(data.data)
         });
       }
+      setLoading(false);
     });
     return () => unsubscribe();
   }, [axiosSecure]);
@@ -69,8 +76,6 @@ const AuthProvider = ({ children }) => {
       setMovies(data.data);
     });
   }, [axiosSecure]);
-
-  
 
   const [isDarkMode, setIsDarkMode] = useState(
     () => localStorage.getItem("theme") === "dark"
@@ -93,7 +98,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     movies,
-  
+    loading,
     createUser,
     signInUser,
     loginGoogle,

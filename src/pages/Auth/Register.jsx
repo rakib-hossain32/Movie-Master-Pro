@@ -1,6 +1,7 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const { isDarkMode, createUser, updateUser } = useAuth();
@@ -13,11 +14,20 @@ const Register = () => {
     const email = e.target.email.value;
     const photoURL = e.target.photoURL.value;
 
+    if (!/^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password)) {
+      toast.error(
+        "Password must contain at least one uppercase, one lowercase, and be at least 6 characters long.",
+        "error"
+      );
+      return;
+    }
+
     console.log({ name, email, password, photoURL });
     createUser(email, password)
       .then((result) => {
         updateUser(name, photoURL)
           .then(() => {
+            toast.success('successfully create account')
             navigate("/");
             console.log(result.user);
           })

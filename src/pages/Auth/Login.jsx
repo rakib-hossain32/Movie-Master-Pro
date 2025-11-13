@@ -1,11 +1,14 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { isDarkMode, signInUser, loginGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation()
+  console.log(location)
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -16,10 +19,11 @@ const Login = () => {
     signInUser(email, password)
       .then(() => {
         // console.log(result);
-        navigate("/");
+        navigate(location.state);
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
+        toast.error(error.message);
       });
   };
 
@@ -27,11 +31,12 @@ const Login = () => {
     // console.log("first");
     loginGoogle()
       .then((result) => {
-        navigate("/");
+        navigate(location.state);
         console.log(result.user);
       })
       .catch((error) => {
         console.log(error.message);
+        toast.error(error.message);
       });
   };
 

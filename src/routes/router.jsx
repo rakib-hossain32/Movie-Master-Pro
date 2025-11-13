@@ -9,18 +9,29 @@ import MovieDetails from "../components/MovieDetalis/MovieDetails";
 import AddMovie from "../pages/AddMovie";
 import EditMovie from "../components/EditMovie/EditMovie";
 import Watchlist from "../pages/Watchlist";
+import ProtectedRoute from "./ProtectedRoute";
+import { Atom } from "lucide-react";
+import PageNotFound from "../components/PageNotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    hydrateFallbackElement: (
+      <div className="flex items-center justify-center h-52">
+        <Atom color="#3280cd" size="50" text="" />
+      </div>
+    ),
+    errorElement: <PageNotFound />,
     Component: RootLayout,
     children: [
       {
         index: true,
+        loader: () => fetch("http://localhost:3000/watchlist"),
         Component: Home,
       },
       {
         path: "/all-movies",
+        loader: () => fetch("http://localhost:3000/watchlist"),
         element: <AllMovies />,
       },
       {
@@ -29,19 +40,37 @@ export const router = createBrowserRouter([
       },
       {
         path: "/my-collection",
-        element: <MyCollection />,
+        element: (
+          <ProtectedRoute>
+            <MyCollection />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/edit-movie/:id",
-        element: <EditMovie isEdit={true} />,
+        element: (
+          <ProtectedRoute>
+            <EditMovie isEdit={true} />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/add-movie",
-        element: <EditMovie isEdit={false} />,
+        loader: () => fetch("http://localhost:3000/watchlist"),
+        element: (
+          <ProtectedRoute>
+            {" "}
+            <EditMovie isEdit={false} />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/watchlist",
-        element: <Watchlist />,
+        element: (
+          <ProtectedRoute>
+            <Watchlist />
+          </ProtectedRoute>
+        ),
         loader: () => fetch("http://localhost:3000/watchlist"),
       },
       {

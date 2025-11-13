@@ -36,7 +36,7 @@ const AllMovies = () => {
         const genres = filterGenres.join(",");
         const [minRating, maxRating] = ratingRange;
 
-        // 🔹 যদি কিছুই সিলেক্ট না করা হয় — সব movie আনা হবে
+        
         const query =
           genres || minRating > 0 || maxRating < 10
             ? `/movies/filter?genres=${genres}&minRating=${minRating}&maxRating=${maxRating}`
@@ -54,7 +54,7 @@ const AllMovies = () => {
     fetchFilteredMovies();
   }, [filterGenres, ratingRange, axiosSecure]);
 
-  // 🔹 Genre list
+
   const genres = [
     "Action",
     "Drama",
@@ -70,7 +70,7 @@ const AllMovies = () => {
 
   return (
     <div className="px-4 py-8 mx-auto max-w-7xl">
-      {/* Header */}
+     
       <div className="flex flex-col items-start justify-between mb-8 space-y-4 md:flex-row md:items-center md:space-y-0">
         <h1
           className={`text-3xl font-bold ${

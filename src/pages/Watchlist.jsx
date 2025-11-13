@@ -1,36 +1,57 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { useLoaderData, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import MovieCard from "../components/MovieCard";
 import { Heart } from "lucide-react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { Atom } from "react-loading-indicators";
 
 const Watchlist = () => {
-    const a = useLoaderData();
-    
-    const { isDarkMode, movies } = useAuth();
-    
-    const [watchlists, setWatchlists] = useState([]);
-    
-    const [watchId, setWatchId] = useState("");
-    
-    const navigate = useNavigate()
+  // const a = useLoaderData();
 
-//   console.log(watchId);
+  const { isDarkMode, movies, user,  } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  const [watchlists, setWatchlists] = useState([]);
+
+  const [watchIn, setWatchIn] = useState([]);
+
+  const [watchId, setWatchId] = useState("");
+
+  const navigate = useNavigate();
+
+  // const email = user?.email
+  // console.log(email, watchIn);
+
+  useEffect(() => {
+    axiosSecure.get(`/watchlist?email=${user?.email}`).then((data) => {
+      setWatchIn(data.data);
+    });
+  }, [axiosSecure, user]);
+  //   console.log(watchId);
 
   useEffect(() => {
     const commonMovies = movies.filter((movie) =>
-      a.some((fav) => fav.id === movie._id)
+      watchIn.some((fav) => fav.id === movie._id)
     );
     console.log(commonMovies);
     setWatchlists(commonMovies);
-  }, [movies, a]);
-    
-    useEffect(() => {
-      if (!watchId) return;
-      setWatchlists((prev) => prev.filter((m) => m._id !== watchId));
-    }, [watchId]);
+  }, [movies, watchIn]);
+
+  useEffect(() => {
+    if (!watchId) return;
+    setWatchlists((prev) => prev.filter((m) => m._id !== watchId));
+  }, [watchId]);
 
   // console.log({isDarkMode, user, movies})
+  // if (loading) {
+  //   console.log("first");
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen ">
+  //       <Atom color="#32cd32" size="large" text="" textColor="" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -56,7 +77,7 @@ const Watchlist = () => {
             watch!
           </p>
           <button
-            onClick={() => navigate('/all-movies')}
+            onClick={() => navigate("/all-movies")}
             className="px-6 py-3 mt-6 font-medium text-white bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700"
           >
             Browse Movies

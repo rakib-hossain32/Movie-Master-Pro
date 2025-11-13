@@ -102,15 +102,33 @@ const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
             }}
           />
 
-          <button
-            onClick={() => handleWatchlistDelete(movie._id)}
+          {/* <button
+            
             className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
           >
             <Heart
               className={`w-5 h-5 
                   ${isWatchList ? "fill-red-500 text-red-500" : "text-white"}`}
             />
-          </button>
+          </button> */}
+          {isWatchList ? (
+            <button
+              onClick={() => handleWatchlistDelete(movie._id)}
+              className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
+            >
+              <Heart
+                className={`w-5 h-5 
+                  ${isWatchList ? "fill-red-500 text-red-500" : "text-white"}`}
+              />
+            </button>
+          ) : (
+            <button className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110">
+              <Heart
+                className={`w-5 h-5 text-white
+                  // `}
+              />
+            </button>
+          )}
         </div>
         <div className="p-4 space-y-2">
           <div className="flex items-center justify-between">
