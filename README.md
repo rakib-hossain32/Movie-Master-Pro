@@ -31,6 +31,7 @@
 ### Backend  
 - 🟢 **Node.js**  
 - 🚀 **Express.js**
+- 🍃 **MongoDB Atlas**
 
 - ---
 
@@ -38,11 +39,10 @@
 🔗 [Live Site Link](https://movies-master-pro.web.app/)
 
 ## 💻 GitHub Repository
-🔗 [GitHub Repo Link](https://github.com/rakib-hossain32/Green-Nest.git)
+🔗 [GitHub Repo Link](https://github.com/rakib-hossain32/Movie-Master-Pro.git)
 
 ---
-- 🍃 **MongoDB Atlas**
 
----
+
 
 
