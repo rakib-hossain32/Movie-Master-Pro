@@ -73,6 +73,52 @@ Add package.json
     "globals": "^16.4.0",
     "vite": "^7.1.7"
   }
+```
+
+-    ## 🚀 Run Locally
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/rakib-hossain32/Movie-Master-Pro.git
+cd Movie-Master-Pro
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open your browser at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 📦 Build & Deployment
+
+Build the project for production:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+Deploy the generated `dist/` folder to **Netlify**, **Vercel**, or any static hosting platform.
 
 
 
