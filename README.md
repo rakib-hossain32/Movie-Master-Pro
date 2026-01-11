@@ -142,5 +142,5 @@ Contributions are welcome! If you'd like to improve this project:
 For any inquiries or feedback, please contact:
 
 - **Email**: rakibulhasanmd678@gmail.com
-- **LinkedIn**: [Your Profile](https://www.linkedin.com/in/rakib-hossain-md/)
-- **GitHub**: [Your Profile](https://github.com/rakib-hossain32)
+- **LinkedIn**: [Rakib Hossain](https://www.linkedin.com/in/rakib-hossain-md/)
+- **GitHub**: [Rakib Hossain](https://github.com/rakib-hossain32)
