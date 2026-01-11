@@ -55,16 +55,17 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      if (currentUser) {
-        const loggedUser = {
-          email: currentUser.email,
-          displayName: currentUser.displayName,
-        };
+      // console.log(currentUser)
+      // if (currentUser) {
+      //   const loggedUser = {
+      //     email: currentUser.email,
+      //     displayName: currentUser.displayName,
+      //   };
 
-        axiosSecure.post("/users-create", loggedUser).then(() => {
-          // console.log(data.data)
-        });
-      }
+        // axiosSecure.post("/users-create", loggedUser).then(() => {
+        //   // console.log(data.data)
+        // });
+      // }
     });
     return () => unsubscribe();
   }, [axiosSecure]);
@@ -76,23 +77,7 @@ const AuthProvider = ({ children }) => {
     });
   }, [axiosSecure]);
 
-  const [isDarkMode, setIsDarkMode] = useState(
-    () => localStorage.getItem("theme") === "dark"
-  );
-
-  const toggleTheme = () => setIsDarkMode((prev) => !prev);
-
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
 
   const authInfo = {
     user,
@@ -103,8 +88,7 @@ const AuthProvider = ({ children }) => {
     loginGoogle,
     updateUser,
     signOutUser,
-    isDarkMode,
-    toggleTheme,
+
     showMobileMenu,
     setShowMobileMenu,
   };

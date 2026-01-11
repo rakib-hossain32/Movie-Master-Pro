@@ -6,21 +6,31 @@ import MyCollection from "../pages/MyCollection";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import MovieDetails from "../components/MovieDetalis/MovieDetails";
-import AddMovie from "../pages/AddMovie";
+
 import EditMovie from "../components/EditMovie/EditMovie";
 import Watchlist from "../pages/Watchlist";
 import ProtectedRoute from "./ProtectedRoute";
-import { Atom } from "lucide-react";
+
 import PageNotFound from "../components/PageNotFound";
+import Features from "../pages/FooterPage/Features.jsx";
+import Privacy from "../pages/FooterPage/Privacy.jsx";
+
+import Contact from "../pages/FooterPage/Contact.jsx";
+import Pricing from "../pages/FooterPage/Pricing.jsx";
+import Terms from "../pages/FooterPage/Terms.jsx";
+import DashboardHome from "../pages/Dashboard/DashboardHome.jsx";
+import DashboardLayout from "../layouts/DashboardLayout.jsx";
+import Profile from "../pages/Dashboard/Profile.jsx";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner.jsx";
+import Support from "../pages/Support/Support.jsx";
+import ProtectedDashboard from "./ProtectedDashboard.jsx";
+import Blogs from "../pages/Blogs/Blogs.jsx";
+import AdminRoute from "./AdminRoute.jsx";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    hydrateFallbackElement: (
-      <div className="flex items-center justify-center h-52">
-        <Atom color="#3280cd" size="50" text="" />
-      </div>
-    ),
+    hydrateFallbackElement: <LoadingSpinner />,
     errorElement: <PageNotFound />,
     Component: RootLayout,
     children: [
@@ -32,40 +42,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/all-movies",
-        loader: () =>
-          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
         element: <AllMovies />,
+      },
+      {
+        path: "/support",
+        Component: Support,
+      },
+      {
+        path: "/blogs",
+        Component: Blogs,
       },
       {
         path: "/movie-details/:id",
         Component: MovieDetails,
-      },
-      {
-        path: "/my-collection",
-        element: (
-          <ProtectedRoute>
-            <MyCollection />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/edit-movie/:id",
-        element: (
-          <ProtectedRoute>
-            <EditMovie isEdit={true} />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/add-movie",
-        loader: () =>
-          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
-        element: (
-          <ProtectedRoute>
-            {" "}
-            <EditMovie isEdit={false} />
-          </ProtectedRoute>
-        ),
       },
       {
         path: "/watchlist",
@@ -74,16 +63,86 @@ export const router = createBrowserRouter([
             <Watchlist />
           </ProtectedRoute>
         ),
-        loader: () =>
-          fetch("https://movies-master-pro-api-server.vercel.app/watchlist"),
       },
       {
-        path: "/login",
+        path: "/features",
+        Component: Features,
+      },
+      {
+        path: "/terms",
+        Component: Terms,
+      },
+      {
+        path: "/privacy",
+        Component: Privacy,
+      },
+
+      {
+        path: "/contact",
+        Component: Contact,
+      },
+      {
+        path: "/pricing",
+        Component: Pricing,
+      },
+      {},
+      {
+        path: "/signin",
         Component: Login,
       },
       {
         path: "/register",
         Component: Register,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedDashboard>
+            <DashboardHome />
+          </ProtectedDashboard>
+        ),
+      },
+      {
+        path: "add-movie",
+        element: (
+          <AdminRoute>
+            <EditMovie isEdit={false}/>
+          </AdminRoute>
+        ), // Reuse your AddMovie component
+      },
+      {
+        path: "my-movies",
+        element: (
+          <AdminRoute>
+            <MyCollection />
+          </AdminRoute>
+        ), // Reuse MyCollection component
+      },
+      {
+        path: "edit-movie/:id",
+        element: (
+          <AdminRoute>
+            <EditMovie isEdit={true} />
+          </AdminRoute>
+        ), // Edit route inside dashboard
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

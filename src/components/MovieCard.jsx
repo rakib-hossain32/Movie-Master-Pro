@@ -1,201 +1,255 @@
-import useAuth from "../hooks/useAuth";
-import { Heart, Star, Trash2 } from "lucide-react";
-import { NavLink } from "react-router";
+import React, { memo } from "react";
+import { Heart, Star, Trash2, Calendar, Clock, Eye } from "lucide-react";
+import { NavLink, useNavigate } from "react-router";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
-  const { isDarkMode } = useAuth();
   const axiosSecure = useAxiosSecure();
-
-  // const [movieIn, setMovieIn] = useState(movie)
-
-  // console.log(movie._id);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleMovieDelete = (id) => {
-    // console.log(id)
-
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#D90429", // Primary Red
+      cancelButtonColor: "#8D99AE", // Secondary Gray
       confirmButtonText: "Yes, delete it!",
+      background: "#fff",
+      color: "#000",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/movies/${id}`).then((data) => {
-          // console.log();
           if (data.data.deletedCount) {
             setId(id);
-            // console.log(id)
-            // const remaining =
-            // const remaining =
-            // navigate("/my-collection");
+            Swal.fire({
+              title: "Deleted!",
+              text: "Movie has been removed.",
+              icon: "success",
+              confirmButtonColor: "#D90429",
+            });
           }
         });
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your movie has been deleted.",
-          icon: "success",
-        });
-        // console.log('first')
       }
     });
-    // console.log('first')
   };
 
+  // console.log(movie)
+
   const handleWatchlistDelete = (id) => {
-    // console.log("first", id);
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Remove from Watchlist?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#D90429",
+      cancelButtonColor: "#8D99AE",
+      confirmButtonText: "Yes, remove!",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/watchlist/${id}`).then((data) => {
-          // console.log(data.data);
           if (data.data.deletedCount) {
             setWatchId(id);
-            // setId(id);
-            // console.log(id)
-            // const remaining =
-            // const remaining =
-            // navigate("/my-collection");
+            Swal.fire({
+              title: "Removed!",
+              text: "Movie removed from watchlist.",
+              icon: "success",
+              confirmButtonColor: "#D90429",
+            });
           }
         });
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your movie has been deleted.",
-          icon: "success",
-        });
-        // console.log('first')
       }
     });
   };
 
-  return (
-    <div>
-      <div
-        className={`rounded-xl overflow-hidden shadow-xl transition transform hover:scale-105 group ${
-          isDarkMode
-            ? "bg-gray-800 border border-gray-700"
-            : "bg-white border border-gray-200"
-        }`}
-      >
-        <div className="relative h-48 md:h-64">
-          <img
-            src={movie.poster}
-            alt={movie.title}
-            className="object-cover w-full h-full transition duration-300 group-hover:opacity-80"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src =
-                "https://placehold.co/400x600/4f46e5/ffffff?text=Poster+Not+Found";
-            }}
-          />
+  const handleWatchlistAdd = () => {
+    if (user && user?.email) {
+      const { _id, title, poster, duration, year, rating, genre } = movie;
+      const watchItem = {
+        movie_id: _id,
+        email: user.email,
+        title,
+        poster,
+        duration,
+        year,
+        rating,
+        genre
+      };
 
-          {/* <button
-            
-            className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
-          >
-            <Heart
-              className={`w-5 h-5 
-                  ${isWatchList ? "fill-red-500 text-red-500" : "text-white"}`}
-            />
-          </button> */}
+      axiosSecure.post("/watchlist", watchItem).then((data) => {
+        if (data.data.insertedId) {
+          toast.success("Added to Watchlist!");
+        } else {
+          toast.error("Already in Watchlist!");
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Please Login",
+        text: "You need to login to add to watchlist",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Login"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/signin");
+        }
+      });
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.2 }}
+      className="group relative bg-base-100 rounded-2xl overflow-hidden shadow-md hover:shadow-xl border border-base-200 hover:border-primary/20 transition-all duration-300"
+    >
+      {/* Poster Image */}
+      {/* Poster Image (Clickable Link) */}
+      <NavLink to={`/movie-details/${movie._id}`} className="block relative h-[320px] overflow-hidden bg-base-200 cursor-pointer">
+        <img
+          src={movie.poster}
+          alt={movie.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src =
+              "https://placehold.co/400x600/1f2937/ffffff?text=No+Poster";
+          }}
+        />
+
+        {/* Overlay on Hover */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Genre Badge */}
+        <div className="absolute top-4 left-4">
+          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-primary/90 backdrop-blur-md rounded-lg shadow-sm">
+            {movie.genre?.split(",")[0]}
+          </span>
+        </div>
+
+        {/* Detail/Remove Button (appears on hover) */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+          {isWatchList ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleWatchlistDelete(movie._id);
+              }}
+              className="px-6 py-2.5 bg-error text-white font-bold rounded-xl shadow-xl hover:bg-red-700 transition-all transform active:scale-95 flex items-center gap-2 cursor-pointer pointer-events-auto"
+            >
+              <Trash2 size={18} />
+              <span>Remove</span>
+            </div>
+          ) : (
+            <div
+              className="px-6 py-2.5 bg-white text-primary font-bold rounded-xl shadow-xl hover:bg-primary hover:text-white transition-all transform active:scale-95 flex items-center gap-2 pointer-events-none"
+            >
+              <Eye size={18} />
+              <span>Details</span>
+            </div>
+          )}
+        </div>
+
+        {/* Top Right Actions - Stop Propagation to prevent navigating when clicking heart */}
+        <div className="absolute top-4 right-4" onClick={(e) => e.preventDefault()}>
           {isWatchList ? (
             <button
-              onClick={() => handleWatchlistDelete(movie._id)}
-              className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleWatchlistDelete(movie._id);
+              }}
+              className="p-2 bg-primary text-white rounded-full shadow-lg hover:scale-110 transition-transform cursor-pointer"
             >
-              <Heart
-                className={`w-5 h-5 
-                  ${isWatchList ? "fill-red-500 text-red-500" : "text-white"}`}
-              />
+              <Heart className="w-4 h-4 fill-white" />
             </button>
           ) : (
-            <button className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110">
-              <Heart
-                className={`w-5 h-5 text-white
-               `}
-              />
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent navigating to details
+                e.preventDefault(); // Prevent navigating to details (double check for NavLink)
+                handleWatchlistAdd();
+              }}
+              className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full hover:bg-white hover:text-primary transition-colors cursor-pointer"
+            >
+              <Heart className="w-4 h-4" />
             </button>
           )}
         </div>
-        <div className="p-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <h3
-              className={`text-lg font-bold truncate ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              {movie.title}
-            </h3>
-            <p
-              className={`   truncate bg-gray-100 px-2 py-1 rounded-full ${
-                isDarkMode ? "text-white bg-gray-100/10" : "text-gray-900"
-              }`}
-            >
-              {movie.year}
-            </p>
-          </div>
+      </NavLink>
 
-          <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center font-semibold">
-              <Star className="w-4 h-4 mr-1 text-yellow-400" />
-              <span className={isDarkMode ? "text-gray-300" : "text-gray-700"}>
-                {movie.rating}
-              </span>
-            </span>
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                isDarkMode
-                  ? "bg-gray-700 text-gray-300"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {movie.genre}
-            </span>
+      {/* Content */}
+      <div className="p-5 ">
+        <div className="flex justify-between items-start gap-4 mb-3">
+          <NavLink to={`/movie-details/${movie._id}`} className="font-bold text-lg text-base-content line-clamp-1 leading-tight hover:text-primary transition-colors cursor-pointer">
+            {movie.title}
+          </NavLink>
+          <div className="flex items-center gap-1 text-warning shrink-0">
+            <Star size={14} className="fill-current" />
+            <span className="text-xs font-bold">{movie.rating}</span>
           </div>
-          {isEdit ? (
-            <NavLink
-              to={`/movie-details/${movie._id}`}
-              onClick={() => {
-                //   setSelectedMovie(movie);
-                //   setCurrentPage("movie-details");
-              }}
-              className="inline-block w-full px-4 py-2 mt-3 font-medium text-center text-white transition bg-blue-600 shadow-md in rounded-xl hover:bg-blue-700"
-            >
-              View Details
-            </NavLink>
-          ) : isWatchList ? (
-            <button
-              onClick={() => handleWatchlistDelete(movie._id)}
-              className="flex items-center justify-center w-full px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
-            >
-              Remove Watchlist
-            </button>
-          ) : (
+        </div>
+
+        <div className="flex items-center justify-between text-[11px] font-bold text-base-content/50 uppercase tracking-tighter border-t border-base-200 pt-4">
+          <div className="flex items-center gap-1.5 ">
+            <Calendar size={14} />
+            <span>{movie.year}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock size={14} />
+            <span>{movie.runtime}m</span>
+          </div>
+          {isEdit && !isWatchList && (
             <button
               onClick={() => handleMovieDelete(movie._id)}
-              className="flex items-center justify-center w-full px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
+              className="text-error hover:text-red-700 transition-colors"
             >
-              <Trash2 className="w-5 h-5" />
-              <span>Delete</span>
+              <Trash2 size={16} />
             </button>
+          )}
+        </div>
+
+        {/* Mobile-Only Details/Remove Button */}
+        <div className="lg:hidden">
+          {isWatchList ? (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleWatchlistDelete(movie._id);
+              }}
+              className="w-full py-2 bg-error/10 hover:bg-error hover:text-white text-error font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-2 mt-5"
+            >
+              <Trash2 size={14} />
+              <span>Remove</span>
+            </button>
+          ) : (
+            <NavLink
+              to={`/movie-details/${movie._id}`}
+              className="w-full py-2 bg-base-200/50 hover:bg-primary hover:text-white text-base-content font-bold rounded-lg  transition-colors flex items-center justify-center gap-2 mt-4"
+            >
+              <Eye size={14} />
+              <span>View Details</span>
+            </NavLink>
           )}
         </div>
       </div>
-    </div>
+
+    </motion.div >
   );
 };
 
-export default MovieCard;
+export default memo(MovieCard);

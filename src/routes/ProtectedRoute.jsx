@@ -1,7 +1,8 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
-import { Atom } from "react-loading-indicators";
+;
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -11,18 +12,14 @@ const ProtectedRoute = ({ children }) => {
 
   // console.log(loading)
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen ">
-        <Atom color="#32cd32" size="large" text="" textColor="" />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (user) {
     return children;
   }
 
-  return <Navigate state={location.pathname} to={"/login"} />;
+  return <Navigate state={location.pathname} to={"/signin"} />;
 };
 
 export default ProtectedRoute;

@@ -1,57 +1,62 @@
-import React, { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth";
+
 import MovieCard from "../components/MovieCard";
 import { Link } from "react-router";
+import { ArrowRight, Trophy } from "lucide-react";
 
-const TopRatedMovies = () => {
-  const { movies, isDarkMode } = useAuth();
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  // console.log(movies)
-    
-    // const a = movies.sort((a, b) => a.rating - b.rating)
-    // console.log(a)
+const TopRatedMovies = ({ topRatedMovies: movies, isLoading }) => {
+  // const { movies } = useAuth();
+  // const [topRatedMovies, setTopRatedMovies] = useState([]);
 
-    // console.log(movies)
+  // useEffect(() => {
+  //   // Sort movies by rating in descending order
+  //   const topRated = [...movies].sort((a, b) => b.rating - a.rating);
+  //   setTopRatedMovies(topRated);
+  // }, [movies]);
 
-  useEffect(() => {
-      const topRated = [...movies];
-      topRated.sort((a, b) => b.rating - a.rating);
-    //   console.log(topRated)
-    setTopRatedMovies(topRated);
-  }, [movies]);
-    
-//     console.log(topRatedMovies);
-
-  return (
-    <div className="px-4 mx-auto my-15 max-w-7xl">
-      {/* <h2
-        className={`text-3xl font-bold mb-8 text-center ${
-          isDarkMode ? "text-white" : "text-gray-900"
-        }`}
-      ></h2> */}
-      <div className="flex items-center justify-between mb-8">
-        <h2
-          className={`text-3xl font-bold  ${
-            isDarkMode ? "text-white" : "text-gray-900"
-          }`}
-        >
-          Top Rated Movies
-        </h2>
-        <Link
-          className={`hover:underline hover:text-blue-400 ${
-            isDarkMode ? "text-white" : "text-gray-900"
-          }`}
-          to={"/all-movies"}
-        >
-          View All
-        </Link>
-      </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-        {topRatedMovies.slice(0, 5).map((movie) => (
-          <MovieCard key={movie._id} movie={movie} isEdit={true} />
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-96 bg-base-300 rounded-2xl animate-pulse" />
         ))}
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <section className="pb-20 bg-base-100">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row items-end justify-between gap-4 mb-10 border-b border-base-200 pb-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs">
+              <Trophy className="w-4 h-4" />
+              <span>Curated Selection</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-base-content tracking-tight">
+              Top Rated <span className="text-primary">Movies</span>
+            </h2>
+          </div>
+
+          <Link
+            to="/all-movies"
+            className="group flex items-center gap-2 text-sm font-bold text-base-content/70 hover:text-primary transition-colors"
+          >
+            <span>View All Movies</span>
+            <div className="p-1 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-white transition-all">
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+        </div>
+
+        {/* Movies Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {movies.map((movie) => (
+            <MovieCard key={movie._id} movie={movie} isEdit={false} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

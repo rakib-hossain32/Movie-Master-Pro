@@ -1,65 +1,91 @@
-import React from 'react';
-import { NavLink,  } from 'react-router';
-import Navigation from './Navigation/Navigation';
+import React from "react";
+import { Link, useNavigate } from "react-router"; // Use 'react-router-dom' if specifically needed, usually it's 'react-router-dom'
+import { motion } from "framer-motion";
+import { Home, ArrowLeft, Film, AlertCircle } from "lucide-react";
 
 const PageNotFound = () => {
+  const navigate = useNavigate();
 
-    // const location = useLocation()
-    // console.log(location)
-    
-    return (
-      //   <div>
-
-      //       <div className="bg-linear-to-r from-purple-300 to-blue-200">
-      //         <div className="flex items-center justify-center w-9/12 min-h-screen py-16 m-auto">
-      //           <div className="pb-8 overflow-hidden bg-white shadow sm:rounded-lg">
-      //             <div className="pt-8 text-center border-t border-gray-200">
-      //               <h1 className="font-bold text-purple-400 text-9xl">404</h1>
-      //               <h1 className="py-8 text-6xl font-medium">
-      //                 oops! Page not found
-      //               </h1>
-      //               <p className="px-12 pb-8 text-2xl font-medium">
-      //                 Oops! The page you are looking for does not exist. It might
-      //                 have been moved or deleted.
-      //               </p>
-      //               <button className="px-6 py-3 mr-6 font-semibold text-white rounded-md bg-linear-to-r from-purple-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
-      //                 HOME
-      //               </button>
-      //               <button className="px-6 py-3 font-semibold text-white rounded-md bg-linear-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-500">
-      //                 Contact Us
-      //               </button>
-      //             </div>
-      //           </div>
-      //         </div>
-      //       </div>
-
-      //   </div>
-        <div className="">
-            <Navigation />
-        <main className="grid min-h-screen px-6 py-24 bg-gray-900 place-items-center sm:py-32 lg:px-8">
-          <div className="text-center">
-            <p className="text-base font-semibold text-indigo-400">404</p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-tight text-white text-balance sm:text-7xl">
-              Page not found
-            </h1>
-            <p className="mt-6 text-lg font-medium text-gray-400 text-pretty sm:text-xl/8">
-              Sorry, we couldn’t find the page you’re looking for.
-            </p>
-            <div className="flex items-center justify-center mt-10 gap-x-6">
-              <NavLink
-                to={"/"}
-                className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                Go back home
-              </NavLink>
-              <NavLink to={"/"} className="text-sm font-semibold text-white">
-                Contact support <span aria-hidden="true">&rarr;</span>
-              </NavLink>
-            </div>
-          </div>
-        </main>
+  return (
+    <div className="relative min-h-screen bg-base-100 flex items-center justify-center overflow-hidden">
+      {/* --- Ambient Background Effects --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[150px]" />
+        {/* Cinematic Noise Texture */}
+        <div className="absolute inset-0 bg-[url('https://grainy-linears.vercel.app/noise.svg')] opacity-5" />
       </div>
-    );
+
+      <div className="relative z-10 px-6 text-center max-w-3xl mx-auto">
+        {/* --- Animated 404 Visual --- */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative inline-block"
+        >
+          {/* Main 404 Text */}
+          <h1 className="text-[150px] sm:text-[200px] md:text-[250px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-base-content/10 to-base-content/5 select-none">
+            404
+          </h1>
+
+          {/* Overlay Floating Icon */}
+          <motion.div
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          >
+            <div className="p-6 rounded-4xl bg-base-100 shadow-2xl border border-base-200">
+              <Film className="w-16 h-16 sm:w-20 sm:h-20 text-primary" />
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* --- Error Message --- */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="space-y-6 -mt-10 sm:-mt-16 relative z-20"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest">
+            <AlertCircle size={14} /> Scene Missing
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-black text-base-content">
+            Cut! We lost the shot.
+          </h2>
+
+          <p className="text-lg text-base-content/60 max-w-lg mx-auto leading-relaxed">
+            The page you are looking for might have been removed, had its name
+            changed, or is temporarily unavailable.
+          </p>
+
+          {/* --- Action Buttons --- */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-base-200 text-base-content font-bold hover:bg-base-300 transition-all active:scale-95 group"
+            >
+              <ArrowLeft
+                size={18}
+                className="group-hover:-translate-x-1 transition-transform"
+              />
+              Go Back
+            </button>
+
+            <Link
+              to="/"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:bg-red-700 hover:-translate-y-1 transition-all active:scale-95"
+            >
+              <Home size={18} />
+              Back to Home
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
 };
 
 export default PageNotFound;

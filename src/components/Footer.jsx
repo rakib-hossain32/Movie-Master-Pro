@@ -1,183 +1,169 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { Facebook, Sparkles, Youtube } from "lucide-react";
-import { FaXTwitter } from "react-icons/fa6";
-import useAuth from "../hooks/useAuth";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Sparkles,
+  ArrowRight,
+  Mail,
+  ShieldCheck,
+  MapPin,
+  Phone,
+} from "lucide-react";
+import { Link } from "react-router";
 
 export default function Footer() {
-  const { isDarkMode } = useAuth();
-
-  // Conditional theme classes
-  const glassBg = isDarkMode
-    ? "bg-gray-800/40 border-gray-600/20"
-    : "bg-white/30 border-gray-300/20";
-  const textColor = isDarkMode ? "text-gray-300" : "text-gray-700";
-  const headingColor = isDarkMode ? "text-cyan-400" : "text-rose-500";
-
   return (
-    <footer className="relative z-10 w-full pt-16 pb-8 mt-8 overflow-hidden">
-      {/* Glow Lights */}
-      <div className="absolute top-0 z-0 w-full h-full -translate-x-1/2 pointer-events-none select-none left-1/2">
-        <div className="absolute rounded-full -top-32 left-1/4 h-72 w-72 bg-rose-600/20 blur-3xl"></div>
-        <div className="absolute rounded-full right-1/4 -bottom-24 h-80 w-80 bg-cyan-400/20 blur-3xl"></div>
+    <footer className="relative pt-24 bg-base-200 text-base-content overflow-hidden border-t border-base-content/5">
+      {/* --- Cinematic Background Mesh --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[150px]" />
+        <div className="absolute inset-0 bg-[url('https://grainy-linears.vercel.app/noise.svg')] opacity-5" />
       </div>
 
-      {/* Main Glass Container */}
-      <div
-        className={`relative flex flex-col items-center max-w-6xl gap-8 px-6 py-10 mx-auto rounded-2xl border ${glassBg} backdrop-blur-md md:flex-row md:items-start md:justify-between md:gap-12 transition-all duration-500`}
-      >
-        {/* Brand Section */}
-        <div className="flex flex-col items-center md:items-start">
-          <motion.a
-            href="/"
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            {" "}
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-linear-to-br from-rose-500 to-rose-700">
-              {" "}
-              <Sparkles className="w-5 h-5 text-white" />{" "}
-            </div>{" "}
-            <span className="text-xl font-bold leading-4 text-transparent bg-linear-to-r from-rose-500 to-rose-700 bg-clip-text">
-              {" "}
-              Movies <br /> Master Pro{" "}
-            </span>{" "}
-          </motion.a>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* --- Middle Section: Links Grid --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+          {/* Brand Info (4 Cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-primary to-red-700 flex items-center justify-center text-white shadow-lg shadow-primary/30">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="text-2xl font-black tracking-tighter">
+                  MovieMaster
+                </span>
+                <span className="block text-[10px] font-bold tracking-[0.3em] text-primary uppercase">
+                  Pro Edition
+                </span>
+              </div>
+            </Link>
+            <p className="text-base-content/70 leading-relaxed pr-4">
+              The ultimate destination for cinephiles. Discover, track, and
+              organize your movie journey with cutting-edge tools and a global
+              community.
+            </p>
+            <div className="flex gap-4">
+              {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="p-2 rounded-lg bg-base-100 hover:bg-primary hover:text-white transition-all duration-300 border border-base-content/5"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </div>
+          </div>
 
-          <p
-            className={`max-w-xs my-6 text-sm text-center md:text-left ${textColor}`}
-          >
-            MovieMaster Pro helps you discover, organize, and manage your
-            favorite movies. Explore top-rated films, create personal
-            collections, and enjoy seamless browsing.
-          </p>
+          {/* Links (8 Cols split into 3 lists) */}
+          <div className="lg:col-span-2">
+            <h4 className="font-bold text-lg mb-6 text-primary">Product</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link
+                  to="/features"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pricing"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/all-movies"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Browse Movies
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-          <div className="flex gap-4 mt-2">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`transition ${textColor} hover:text-rose-500`}
-            >
-              <Facebook size={24} />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`transition ${textColor} hover:text-cyan-400`}
-            >
-              <FaXTwitter size={24} />
-            </a>
-            <a
-              href="https://youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`transition ${textColor} hover:text-red-500`}
-            >
-              <Youtube size={24} />
-            </a>
+          <div className="lg:col-span-2">
+            <h4 className="font-bold text-lg mb-6 text-primary">Company</h4>
+            <ul className="space-y-4">
+              <li>
+                {/* <Link
+                  to="/about"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  About Us
+                </Link> */}
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li>
+                {/* <Link
+                  to="/careers"
+                  className="text-base-content/70 hover:text-primary transition-colors"
+                >
+                  Careers
+                </Link> */}
+              </li>
+            </ul>
+          </div>
+
+          <div className="lg:col-span-4">
+            <h4 className="font-bold text-lg mb-6 text-primary">
+              Contact & Legal
+            </h4>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-base-content/70">
+                <MapPin className="w-5 h-5 text-primary mt-0.5" />
+                <span>123 Cinema Street, Hollywood Blvd, Los Angeles, CA</span>
+              </li>
+              <li className="flex items-center gap-3 text-base-content/70">
+                <Phone className="w-5 h-5 text-primary" />
+                <span>+1 (555) 123-4567</span>
+              </li>
+              <div className="pt-4 flex flex-wrap gap-4 text-sm font-medium">
+                <Link
+                  to="/privacy"
+                  className="hover:text-primary underline decoration-primary/30"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms"
+                  className="hover:text-primary underline decoration-primary/30"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+            </ul>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex flex-col w-full gap-8 text-center md:w-auto md:flex-row md:justify-end md:text-left">
-          <div>
-            <div
-              className={`mb-3 text-xs font-semibold tracking-widest uppercase ${headingColor}`}
-            >
-              Product
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className={textColor}>
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Integrations
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Updates
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <div
-              className={`mb-3 text-xs font-semibold tracking-widest uppercase ${headingColor}`}
-            >
-              Company
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className={textColor}>
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <div
-              className={`mb-3 text-xs font-semibold tracking-widest uppercase ${headingColor}`}
-            >
-              Resources
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className={textColor}>
-                  Docs
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Community
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Support
-                </a>
-              </li>
-              <li>
-                <a href="#" className={textColor}>
-                  Security
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-
-      {/* Bottom Copyright */}
-      <div className={`relative z-10 mt-10 text-xs text-center ${textColor}`}>
-        © 2025 MovieMaster Pro. All rights reserved.
+        {/* --- Bottom Section --- */}
+        <div className="border-t border-base-content/10 py-8 flex flex-col md:flex-row items-center justify-center gap-4">
+          <p className="text-sm text-base-content/50 ">
+            © {new Date().getFullYear()} Movie Master Pro. All rights reserved.
+          </p>
+          {/* <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            {/* <span className="text-xs font-bold text-green-500 uppercase tracking-wider">
+              System Operational
+            </span> 
+          </div> */}
+        </div>
       </div>
     </footer>
   );
