@@ -16,8 +16,8 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
-import { motion } from "framer-motion";
-import InfoCard from "./InfoCard";
+import InfoCard from './InfoCard'
+
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
@@ -116,204 +116,244 @@ const MovieDetails = () => {
   //   );
 
   return (
-    <div className="min-h-screen bg-base-100 pb-20 relative overflow-x-hidden">
-      {/* =========================================
-          1. IMMERSIVE HERO BANNER (Top 60% of screen)
-      ========================================= */}
-      <div className="relative h-[65vh] w-full overflow-hidden">
-        {/* Background Image with Blur */}
-        <div
-          className="absolute inset-0 bg-cover bg-center blur-sm scale-105 opacity-60"
-          style={{ backgroundImage: `url(${movieData.poster})` }}
-        />
-        {/* Cinematic linear Overlays */}
-        <div className="absolute inset-0 bg-linear-to-t from-base-100 via-base-100/60 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/80 to-transparent" />
+    <div className="min-h-screen bg-base-100">
 
-        {/* Top Navigation */}
-        <div className="mt-30   px-6 max-w-7xl mx-auto  flex justify-between items-center">
-          <button
-            onClick={() => navigate("/all-movies")}
-            className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 text-white font-bold transition-all"
-          >
-            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="hidden sm:inline">Back</span>
-          </button>
-
-          {/* Share Button (Visual Only) */}
-          <button className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 text-white transition-all">
-            <Share2 className="w-5 h-5" />
-          </button>
+      {/* ═══════════════════════════════════════════════════════════
+          HERO SECTION - Netflix Style
+      ═══════════════════════════════════════════════════════════ */}
+      <div className="relative w-full h-[85vh] overflow-hidden">
+        
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src={movieData.poster}
+            alt={movieData.title}
+            className="w-full h-full object-cover"
+          />
+          {/* linear Overlays */}
+          <div className="absolute inset-0 bg-linear-to-r from-black via-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-base-100 via-transparent to-transparent" />
         </div>
 
-        {/* Hero Content (Title & Meta) */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-70 z-20 max-w-7xl mx-auto flex flex-col items-center md:items-start text-center md:text-left">
-          {/* Animated Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight drop-shadow-2xl mb-4"
-          >
-            {movieData.title}
-          </motion.h1>
+        {/* Content Container */}
+        <div className="relative z-10 h-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col">
+          
+          {/* Navigation - Inside Container with navbar spacing */}
+          <div className="pt-30 sm:pt-35 pb-4">
+            <button
+              onClick={() => navigate("/all-movies")}
+              className="group flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            >
+              <div className="p-2 rounded-full bg-black/30 backdrop-blur-sm group-hover:bg-black/50 transition-all">
+                <ChevronLeft className="w-5 h-5" />
+              </div>
+              <span className="font-semibold hidden sm:inline">Back</span>
+            </button>
+          </div>
 
-          {/* Meta Data Row */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-white/90 font-medium text-sm md:text-base"
-          >
-            <span className="px-3 py-1 rounded bg-primary text-white font-bold uppercase tracking-wider text-xs">
-              {movieData.genre?.split(",")[0]}
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-primary" /> {movieData.year}
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-primary" /> {movieData.runtime} min
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            <span className="flex items-center gap-1.5 text-yellow-400">
-              <Star className="w-4 h-4 fill-current" /> {movieData.rating}
-            </span>
-          </motion.div>
+          {/* Hero Content */}
+          <div className="flex-1 flex items-center">
+            <div className="max-w-2xl space-y-6 -mt-30">
+              
+              {/* Title */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-tight">
+                {movieData.title}
+              </h1>
+
+              {/* Meta Row */}
+              <div className="flex flex-wrap items-center gap-4 text-white/90">
+                <div className="flex items-center gap-2 text-yellow-400 font-bold text-lg">
+                  <Star className="w-5 h-5 fill-current" />
+                  <span>{movieData.rating}</span>
+                </div>
+                <span className="text-white/50">•</span>
+                <span className="font-semibold">{movieData.year}</span>
+                <span className="text-white/50">•</span>
+                <span>{movieData.runtime} min</span>
+                <span className="text-white/50">•</span>
+                <span className="px-3 py-1 border border-white/30 rounded text-xs font-bold uppercase tracking-wider">
+                  {movieData.genre?.split(",")[0]}
+                </span>
+              </div>
+
+              {/* Description */}
+              <p className="text-lg text-white/80 leading-relaxed line-clamp-3">
+                {movieData.description}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button
+                  disabled={watchlistData}
+                  onClick={handleAddWatchlist}
+                  className={`flex items-center gap-3 px-8 py-4 rounded-lg font-bold text-base transition-all ${
+                    watchlistData
+                      ? "bg-white/20 text-white/50 cursor-not-allowed"
+                      : "bg-white text-black hover:bg-white/90"
+                  }`}
+                >
+                  <Play className="w-5 h-5 fill-current" />
+                  <span>{watchlistData ? "In Watchlist" : "Add to Watchlist"}</span>
+                </button>
+
+                <button className="flex items-center gap-3 px-8 py-4 rounded-lg bg-white/20 backdrop-blur-sm text-white font-bold hover:bg-white/30 transition-all">
+                  <Heart className="w-5 h-5" />
+                  <span className="hidden sm:inline">Save</span>
+                </button>
+
+                <button className="p-4 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all">
+                  <Share2 className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* =========================================
-          2. MAIN CONTENT LAYER (Floating)
-      ========================================= */}
-      <div className="relative z-30 max-w-7xl mx-auto px-6 -mt-60">
-        <div className="grid lg:grid-cols-12 gap-10">
-          {/* --- LEFT: Floating Poster & Actions --- */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            {/* Poster Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="relative rounded-2xl overflow-hidden shadow border-4 border-base-100 group"
-            >
-              <img
-                src={movieData.poster}
-                alt={movieData.title}
-                className="w-full h-auto object-cover"
-              />
-              {/* Hover Play Icon overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center pl-1 shadow-xl hover:scale-110 transition-transform">
-                  <Play className="w-8 h-8 text-white fill-white" />
+      {/* ═══════════════════════════════════════════════════════════
+          CONTENT SECTION
+      ═══════════════════════════════════════════════════════════ */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 space-y-16">
+
+        {/* Cast Section */}
+        <section>
+          <h2 className="text-3xl font-bold text-base-content mb-8">Cast</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {movieData.cast.map((actor, idx) => (
+              <div key={idx} className="group cursor-pointer">
+                <div className="aspect-square rounded-xl bg-linear-to-br from-primary/20 to-red-600/20 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                  <span className="text-4xl font-black text-primary">
+                    {actor.trim().charAt(0)}
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-base-content text-center">
+                  {actor.trim()}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Details Grid */}
+        <section className="grid md:grid-cols-2 gap-12">
+          
+          {/* Left Column */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-sm font-bold text-base-content/50 uppercase tracking-wider mb-2">
+                About
+              </h3>
+              <p className="text-lg text-base-content/80 leading-relaxed">
+                {movieData.description}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <User className="w-5 h-5 text-primary mt-1 shrink-0" />
+                <div>
+                  <p className="text-sm text-base-content/50 mb-1">Director</p>
+                  <p className="text-base font-semibold text-base-content">{movieData.director}</p>
                 </div>
               </div>
-            </motion.div>
 
-            {/* Primary Actions */}
-            <div className="flex flex-col gap-3">
-              <button
-                disabled={watchlistData}
-                onClick={handleAddWatchlist}
-                className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg transition-all transform active:scale-95  ${
-                  watchlistData
-                    ? "bg-base-200 text-base-content/50 cursor-not-allowed"
-                    : "bg-linear-to-r from-primary to-red-700 text-white hover:shadow-primary/40 cursor-pointer"
-                }`}
-              >
-                <Heart
-                  className={`w-5 h-5 ${watchlistData ? "fill-current" : ""}`}
-                />
-                {watchlistData ? "Added to Library" : "Add to Watchlist"}
-              </button>
-
-              {/* Editor Actions (Only for owner) */}
-              {user?.email === movieData.addedBy && (
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => navigate(`/edit-movie/${movieData._id}`)}
-                    className="py-3 rounded-xl bg-base-200 hover:bg-base-300 text-base-content font-bold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Edit className="w-4 h-4" /> Edit
-                  </button>
-                  <button
-                    onClick={handleMovieDelete}
-                    className="py-3 rounded-xl bg-base-200 hover:bg-red-100 hover:text-red-600 text-base-content font-bold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" /> Delete
-                  </button>
+              <div className="flex items-start gap-4">
+                <Globe className="w-5 h-5 text-primary mt-1 shrink-0" />
+                <div>
+                  <p className="text-sm text-base-content/50 mb-1">Language</p>
+                  <p className="text-base font-semibold text-base-content">{movieData.language}</p>
                 </div>
-              )}
+              </div>
+
+              <div className="flex items-start gap-4">
+                <Film className="w-5 h-5 text-primary mt-1 shrink-0" />
+                <div>
+                  <p className="text-sm text-base-content/50 mb-1">Country</p>
+                  <p className="text-base font-semibold text-base-content">{movieData.country}</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* --- RIGHT: Detailed Info --- */}
-          <div className="lg:col-span-8 pt-6  space-y-10">
-            {/* Plot Summary */}
-            <section>
-              <h3 className="text-xl font-bold text-base-content mb-4 flex items-center gap-2">
-                <span className="w-1 h-6 bg-primary rounded-full"></span>
-                The Storyline
+          {/* Right Column */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-sm font-bold text-base-content/50 uppercase tracking-wider mb-4">
+                Movie Info
               </h3>
-              <p className="text-lg text-base-content/70 leading-relaxed font-light">
-                {movieData.description}
-              </p>
-            </section>
-
-            {/* Info Cards (Bento Grid) */}
-            <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <InfoCard
-                icon={User}
-                label="Director"
-                value={movieData.director}
-                sub="Visionary"
-              />
-              <InfoCard
-                icon={Film}
-                label="Country"
-                value={movieData.country}
-                sub="Origin"
-              />
-              <InfoCard
-                icon={Globe}
-                label="Language"
-                value={movieData.language}
-                sub="Audio"
-              />
-              <InfoCard
-                icon={User}
-                label="Added By"
-                value={movieData.addedBy?.split("@")[0]}
-                sub="Curator"
-              />
-            </section>
-
-            {/* Cast Section (Visual) */}
-            <section>
-              <h3 className="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
-                <span className="w-1 h-6 bg-primary rounded-full"></span>
-                Top Cast
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                {/* Assuming cast is a comma separated string, we split it. If array, just map. */}
-                {movieData.cast.map((actor, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-3 p-3 pr-6 rounded-full bg-base-200/50 border border-base-content/5"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-base-300 flex items-center justify-center text-base-content/50 font-bold">
-                      {actor.trim().charAt(0)}
-                    </div>
-                    <span className="font-bold text-base-content/80">
-                      {actor.trim()}
-                    </span>
-                  </div>
-                ))}
+              <div className="space-y-3">
+                <div className="flex justify-between py-3 border-b border-base-content/10">
+                  <span className="text-base-content/60">Release Year</span>
+                  <span className="font-semibold text-base-content">{movieData.year}</span>
+                </div>
+                <div className="flex justify-between py-3 border-b border-base-content/10">
+                  <span className="text-base-content/60">Runtime</span>
+                  <span className="font-semibold text-base-content">{movieData.runtime} minutes</span>
+                </div>
+                <div className="flex justify-between py-3 border-b border-base-content/10">
+                  <span className="text-base-content/60">Genre</span>
+                  <span className="font-semibold text-base-content">{movieData.genre}</span>
+                </div>
+                <div className="flex justify-between py-3 border-b border-base-content/10">
+                  <span className="text-base-content/60">Rating</span>
+                  <span className="font-semibold text-yellow-500 flex items-center gap-1">
+                    <Star className="w-4 h-4 fill-current" />
+                    {movieData.rating}
+                  </span>
+                </div>
+                <div className="flex justify-between py-3">
+                  <span className="text-base-content/60">Added By</span>
+                  <span className="font-semibold text-base-content">{movieData.addedBy?.split("@")[0]}</span>
+                </div>
               </div>
-            </section>
+            </div>
+
+            {/* Owner Actions */}
+            {user?.email === movieData.addedBy && (
+              <div className="pt-6 border-t border-base-content/10">
+                <h3 className="text-sm font-bold text-base-content/50 uppercase tracking-wider mb-4">
+                  Manage
+                </h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => navigate(`/edit-movie/${movieData._id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90 transition-all"
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>Edit Movie</span>
+                  </button>
+                  <button
+                    onClick={handleMovieDelete}
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-base-200 text-base-content font-semibold hover:bg-red-500 hover:text-white transition-all"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        </section>
+
+        {/* Poster Display */}
+        <section>
+          <h2 className="text-3xl font-bold text-base-content mb-8">Poster</h2>
+          <div className="max-w-md">
+            <div className="relative group rounded-2xl overflow-hidden shadow-2xl">
+              <img
+                src={movieData.poster}
+                alt={movieData.title}
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cursor-pointer transform group-hover:scale-110 transition-transform">
+                  <Play className="w-8 h-8 text-white fill-white pl-1" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   );

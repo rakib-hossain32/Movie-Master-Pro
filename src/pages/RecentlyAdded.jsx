@@ -28,9 +28,9 @@ const RecentlyAdded = ({ sortedMovies, isLoading }) => {
     <section className="py-20 bg-base-100">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* --- Premium Section Header --- */}
-        <div className="flex flex-col sm:flex-row items-end justify-between gap-4 mb-10 border-b border-base-200 pb-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs">
+        <div className="flex flex-row justify-center sm:justify-between gap-4 mb-10 border-b border-base-200 pb-4">
+          <div className="space-y-2 ">
+            <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs max-sm:justify-center">
               <Clock className="w-4 h-4" />
               <span>Fresh Arrivals</span>
             </div>
@@ -39,12 +39,13 @@ const RecentlyAdded = ({ sortedMovies, isLoading }) => {
             </h2>
           </div>
 
+          {/* Desktop only */}
           <Link
             to="/all-movies"
-            className="group flex items-center gap-2 text-sm font-bold text-base-content/70 hover:text-primary transition-colors"
+            className="hidden sm:flex group items-center gap-2 shrink-0 text-sm font-bold text-base-content/70 hover:text-primary transition-colors"
           >
             <span>Explore Library</span>
-            <div className="p-1 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+            <div className="p-1.5 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-white transition-all duration-300">
               <ArrowRight className="w-4 h-4 group-hover:-rotate-45 transition-transform" />
             </div>
           </Link>
@@ -70,6 +71,17 @@ const RecentlyAdded = ({ sortedMovies, isLoading }) => {
             </p>
           </div>
         )}
+
+        {/* Mobile only — bottom button */}
+        <div className="flex sm:hidden justify-center mt-8">
+          <Link
+            to="/all-movies"
+            className="group flex items-center gap-2 px-6 py-2.5 text-sm font-bold bg-base-200 hover:bg-primary hover:text-white rounded-full transition-all duration-300"
+          >
+            <span>Explore Library</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </div>
     </section>
   );
